@@ -26,9 +26,9 @@ trait Post_Date_Handler {
     //TODO: Figure out why 'save_post_event' is not firing does it have something to do with the class?
     public function init_archive(){
         add_action('save_post', array($this, 'update_is_upcoming'));
-        add_action('check_upcoming_has_date_passed', array($this, 'check_upcoming_has_date_passed'));
-        if ( wp_next_scheduled( 'check_upcoming_has_date_passed' ) === false ) {
-            wp_schedule_event( time(), 'daily', 'check_upcoming_has_date_passed' );
+        add_action('check_upcoming_is_post_upcoming', array($this, 'check_upcoming_is_post_upcoming'));
+        if ( wp_next_scheduled( 'check_upcoming_is_post_upcoming' ) === false ) {
+            wp_schedule_event( time(), 'daily', 'check_upcoming_is_post_upcoming' );
         }
     }
 
@@ -38,12 +38,12 @@ trait Post_Date_Handler {
     public function update_is_upcoming($post_id){
         global $post;
         if ($post->post_type == $this->slug) {
-            $this->has_date_passed($post_id);
+            $this->is_post_upcoming($post_id);
         }
     }
 
-    /* Loops through all the posts and calls has_date_passed on each one */
-    function check_all_has_date_passed(){
+    /* Loops through all the posts and calls is_post_upcoming on each post */
+    function check_all_is_post_upcoming(){
         $this->loop_through_all(array($this, 'is_post_upcoming'));
     }
 
@@ -57,8 +57,8 @@ trait Post_Date_Handler {
         return call_user_func_array($this->loop_through_posts(array("meta_key" => "_event_upcoming_label", "meta_value" => "Past")), [$callback]);
     }
 
-    /* Passes the has_date_passed function to only the upcoming posts loop */
-    function check_upcoming_has_date_passed(){
+    /* Passes the is_post_upcoming function to only the upcoming posts loop */
+    function check_upcoming_is_post_upcoming(){
         $this->loop_through_upcoming_posts(array($this, 'is_post_upcoming'));
     }
     
