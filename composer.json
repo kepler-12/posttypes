@@ -1,14 +1,9 @@
 {
-    "name": "ttg/posttypes",
-    "description": "A single class to help you build more advanced custom post types quickly.",
-    "homepage": "https://bitbucket.org/technologytherapy/posttypes",
+    "name": "jjgrainger/posttypes",
+    "description": "Simple WordPress custom post types.",
+    "homepage": "https://github.com/jjgrainger/posttype",
     "license": "MIT",
     "authors": [
-        {
-            "name": "Tyler Smith",
-            "email": "tyler@technologytherapy.com",
-            "company": "Technology Therapy"
-        },
         {
             "name": "Joe Grainger",
             "email": "hello@jjgrainger.co.uk",
