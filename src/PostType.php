@@ -2,6 +2,8 @@
 
 namespace PostTypes;
 
+
+
 /**
  * PostType
  *
@@ -21,6 +23,9 @@ class PostType
      *
      * @var string
      */
+
+    public static $POST_TYPE = [];
+
     public $postTypeName;
 
     /**
@@ -112,6 +117,8 @@ class PostType
 
         // add actions and filters
         $this->initialize();
+
+        PostType::$POST_TYPE[$this->slug] = $this;
     }
 
     /**
