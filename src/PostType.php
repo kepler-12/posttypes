@@ -728,10 +728,11 @@ class PostType
             }
             //This function because wordpress can't handle it self
             wp_reset_postdata();
+            return $query;
         };
     }
     
-    private function loop_through_all($callback){
-        return call_user_func_array($this->loop_through_posts(), [$callback]);
+    private function loop_through_all($callback, $args = []){
+        return call_user_func_array($this->loop_through_posts($args), [$callback]);
     }
 }
