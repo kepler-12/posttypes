@@ -732,7 +732,7 @@ class PostType
         };
     }
 
-    private function loop_through_all($callback, $args = []){
+    public function loop_through_all($callback, $args = []){
         return call_user_func_array($this->loop_through_posts($args), [$callback]);
     }
 }
