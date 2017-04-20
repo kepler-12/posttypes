@@ -30,7 +30,7 @@ You are all set!
 * Every day it checks the upcoming events to see if they have past
 
 #### Set up a facet to toggle between the two:
-* Use radio buttons (You might be able to use other, I only tested this one.)
+* Use radio buttons (You might be able to use other, I only tested this facet.)
 * select data source: _event_upcoming_label
 
 
