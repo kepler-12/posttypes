@@ -15,7 +15,7 @@ trait TheLoop
         $query = new \WP_Query($args);
         //Retrun a WP Loop for the given query which accepts a callback to be used on all the posts
         //TODO: This could be an issue with storing the query, but with page reloads it would update
-        return function ($callback) use ($query) {
+        return function ($callback = null) use ($query) {
             while ($query->have_posts()){
                 $query->the_post();
                 call_user_func_array($callback, [get_the_ID()]);
@@ -26,7 +26,7 @@ trait TheLoop
         };
     }
 
-    public function loop_through_all($callback, $args = []){
+    public function loop_through_all($callback = null, $args = []){
         return call_user_func_array($this->loop_through_posts($args), [$callback]);
     }
 

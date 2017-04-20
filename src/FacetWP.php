@@ -15,10 +15,10 @@ trait FacetWP
     public function initFacetWP(){
         $this->facetwp = true;
         $this->default_args['facetwp'] = true;
-        add_filter( 'facetwp_is_main_query', array($this, 'is_main_query'));
+        add_filter( 'facetwp_is_main_query', array($this, 'is_main_query'), 10 , 2);
     }
 
-    public function is_main_query($is_main_query, $query){
+    public function is_main_query( $is_main_query, $query ) {
         if ( isset( $query->query_vars['facetwp'] ) ) {
             $is_main_query = (bool) $query->query_vars['facetwp'];
         }
