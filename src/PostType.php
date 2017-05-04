@@ -716,4 +716,9 @@ class PostType
         return $bulk_messages;
     }
 
+    /**Create A new Post**/
+    public function createAPost($post_options = []){
+        $post_options['post_type'] = $this->slug;
+        wp_insert_post($post_options);
+    }
 }
