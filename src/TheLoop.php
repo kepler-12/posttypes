@@ -7,6 +7,12 @@ trait TheLoop
 
     public $default_args = [];
 
+    public $defaultTemplate;
+
+    public function setDefaultTemplate($functionalTemplate){
+        $this->defaultTemplate = $functionalTemplate;
+    }
+
     public function loop_through_posts($optional_args = []){
         $args = array_merge($this->default_args, $optional_args);
 
