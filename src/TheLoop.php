@@ -14,11 +14,9 @@ trait TheLoop
     }
 
     public function loop_through_posts($optional_args = []){
-        $args = array_merge($this->default_args, $optional_args);
 
-        $args['post_type'] = $this->slug;
+        $query = new \WP_Query($this->returnFormattedArgs());
 
-        $query = new \WP_Query($args);
         //Retrun a WP Loop for the given query which accepts a callback to be used on all the posts
         //TODO: This could be an issue with storing the query, but with page reloads it would update
         return function ($callback = null) use ($query) {
@@ -36,6 +34,10 @@ trait TheLoop
         return call_user_func_array($this->loop_through_posts($args), [$callback]);
     }
 
-
+    public function returnFormattedArgs($optional_args = []){
+        $args = array_merge($this->default_args, $optional_args);
+        $args['post_type'] = $this->slug;
+        return $args;
+    }
 
 }
