@@ -15,7 +15,7 @@ trait TheLoop
 
     public function loop_through_posts($optional_args = []){
 
-        $query = new \WP_Query($this->returnFormattedArgs());
+        $query = new \WP_Query($this->returnFormattedArgs($optional_args));
 
         //Retrun a WP Loop for the given query which accepts a callback to be used on all the posts
         //TODO: This could be an issue with storing the query, but with page reloads it would update
