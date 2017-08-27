@@ -73,7 +73,6 @@ class Columns
      */
     public function add($columns, $label = null)
     {
-
         if (!is_array($columns)) {
             $columns = [$columns => $label];
         }
@@ -143,7 +142,8 @@ class Columns
      * @param string $default
      * @return \Closure
      */
-    public function acf_field_for_column ($post_meta_field, $default = "") {
+    public function acf_field_for_column($post_meta_field, $default = "")
+    {
         return function ($column, $post_id) use ($post_meta_field, $default) {
             $meta_value = get_field($post_meta_field, $post_id);
             if ($meta_value) {
@@ -151,8 +151,6 @@ class Columns
             } else {
                 echo $default;
             }
-
         };
     }
 }
-
