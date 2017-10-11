@@ -26,9 +26,10 @@ trait Post_Date_Handler {
     //TODO: Figure out why 'save_post_event' is not firing does it have something to do with the class?
     public function init_archive(){
         add_action('save_post', array($this, 'update_is_upcoming'));
+        
         add_action('check_upcoming_is_post_upcoming', array($this, 'check_upcoming_is_post_upcoming'));
         if ( wp_next_scheduled( 'check_upcoming_is_post_upcoming' ) === false ) {
-            wp_schedule_event( time(), 'daily', 'check_upcoming_is_post_upcoming' );
+            wp_schedule_event( time(), 'minute', 'check_upcoming_is_post_upcoming' );
         }
     }
 
@@ -49,12 +50,13 @@ trait Post_Date_Handler {
 
     /* creates a loop for all upcoming posts */
     public function loop_through_upcoming_posts($callback){
-        return call_user_func_array($this->loop_through_posts(array("meta_key" => "_event_upcoming_label", "meta_value" => "Upcoming")), [$callback]);
+        return $this->loop_through_all($callback, array("meta_key" => "_event_upcoming_label", "meta_value" => "Upcoming"));
+        
     }
 
     /* creates a loop for all past posts */
     public function loop_through_past_posts($callback){
-        return call_user_func_array($this->loop_through_posts(array("meta_key" => "_event_upcoming_label", "meta_value" => "Past")), [$callback]);
+        return call_user_func_array($this->loop_through_posts(array("posts_per_page"=> -1, "meta_key" => "_event_upcoming_label", "meta_value" => "Past")), [$callback]);
     }
 
     /* Passes the is_post_upcoming function to only the upcoming posts loop */
@@ -67,14 +69,15 @@ trait Post_Date_Handler {
      *  it also sets the post meta field _event_upcoming_label to 'Upcoming' or 'Past'
      */
     public function is_post_upcoming($post_id = false) {
-        $post_id = (!empty($post_id)) ? $post_id : get_the_ID();
+        $post_id = (!empty($post_id)) ? $post_id : get_the_ID();        
         //In order to do this check we need both a post, and an archive date field
         if (empty($post_id) || empty($this->dates['archive'])) {
             return;
         }
+        
         //Get the archived date
         $archive_date = get_post_meta($post_id, $this->dates['archive']);
-        
+
         //Get todays date to compare against
         $today = date('Ymd');
         
@@ -85,9 +88,17 @@ trait Post_Date_Handler {
         
         //Update the archive based on the inequalitys
         $post_meta_value = (intval($today) < intval($archive_date[0])) ? "Upcoming" : "Past";
+        $oldMeta = get_post_meta($post_id, "_event_upcoming_label");
         update_post_meta($post_id, '_is_upcoming', intval($today) < intval($archive_date[0]));
         //This post meta field is specifically for facets.
         //TODO: Could just be the only one?
-        update_post_meta($post_id, '_event_upcoming_label', $post_meta_value);
+        $didUpdate = update_post_meta($post_id, '_event_upcoming_label', $post_meta_value);
+        if ($didUpdate) {
+
+            add_action('init', function() use($post_id)
+            {
+                \FWP()->indexer->index( $post_id );            
+            });
+        }
     }
 }
