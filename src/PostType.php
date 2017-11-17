@@ -2,28 +2,26 @@
 
 namespace PostTypes;
 
-
-
 /**
  * PostType
  *
  * Used to help manage a post types columns in the admin table
  *
- * @link http://github.com/jjgrainger/wp-custom-post-type-class/
- * @author  jjgrainger
- * @link    http://jjgrainger.co.uk
+ * @link http://github.com/kepler-12/posttypes
+ * @author  kepler-12
+ * @link    http://kepler-12.com
  * @version 1.4
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  */
 class PostType
 {
-    use Post_Date_Handler, SubMenu;
+    use PostDate, SubMenu;
+
     /**
      * The post type name.
      *
      * @var string
      */
-
     public static $POST_TYPE = [];
 
     public $postTypeName;
@@ -128,7 +126,6 @@ class PostType
      */
     public function names($names)
     {
-
         // if a string is passed
         if (!is_array($names)) {
             $names = ['name' => $names];
@@ -146,10 +143,8 @@ class PostType
         ];
 
         foreach ($required as $key) {
-
             // if the name has not been passed, generate it
             if (!isset($names[$key])) {
-
                 // if it is the singular/plural make the post type name human friendly
                 if ($key === 'singular' || $key === 'plural') {
                     $name = ucwords(strtolower(str_replace(['-', '_'], ' ', $this->postTypeName)));
@@ -181,7 +176,6 @@ class PostType
      */
     public function options($options)
     {
-
         // default labels.
         $labels = [
             'name' => sprintf(__('%s', $this->textdomain), $this->plural),
@@ -332,7 +326,6 @@ class PostType
     {
         // check that the post type doesn't already exist.
         if (!post_type_exists($this->postTypeName)) {
-
             // register the post type.
             register_post_type($this->postTypeName, $this->options);
         }
@@ -372,7 +365,6 @@ class PostType
 
         // must set this to the post type you want the filter(s) displayed on.
         if ($postType == $this->postTypeName) {
-
             // if we have user supplied filters use them
             if (!empty($this->filters)) {
                 $filters = $this->filters;
@@ -386,7 +378,6 @@ class PostType
 
             // foreach of the taxonomies we want to create filters for
             foreach ($filters as $taxonomy_name) {
-
                 // object for taxonomy, doesn't contain the terms
                 $tax = get_taxonomy($taxonomy_name);
 
@@ -474,9 +465,8 @@ class PostType
             $columns = $newColumns;
         }
 
-        // if user has made added custom columns
+        // if user has added custom columns
         foreach ($this->columns()->add as $key => $label) {
-
             // if user has assigned a custom position
             if (isset($this->columns()->positions[$key])) {
                 $position = $this->columns()->positions[$key];
@@ -529,7 +519,6 @@ class PostType
 
                     // loop through each term, linking to the 'edit posts' page for the specific term
                     foreach ($terms as $term) {
-
                         // output is an array of terms associated with the post
                         $output[] = sprintf(
                             '<a href="%s">%s</a>', // Define link format
@@ -554,7 +543,7 @@ class PostType
             case 'post_id':
                 echo $post->ID;
                 break;
-            // if the column is prepended with 'meta_', this will automagically retrieve the meta values and display them
+            // if the column is prepended with 'meta_', automagically retrieve the meta values and display them
             case preg_match('/^meta_/', $column) ? true : false:
                 // meta_book_author (meta key = book_author)
                 $x = substr($column, 5);
@@ -622,7 +611,6 @@ class PostType
     {
         // cycle through all sortable columns submitted by the user
         foreach ($this->columns()->sortable as $column => $values) {
-
             // retrieve the meta key from the user submitted array of sortable columns
             $meta_key = $values[0];
 
@@ -716,23 +704,25 @@ class PostType
         return $bulk_messages;
     }
 
-    public function loop_through_posts($args = []){
+    public function loop($args = [])
+    {
         $args['post_type'] = $this->slug;
         $query = new \WP_Query($args);
-        //Retrun a WP Loop for the given query which accepts a callback to be used on all the posts
-        //TODO: This could be an issue with storing the query, but with page reloads it would update
+        // Retrun a WP Loop for the given query which accepts a callback to be used on all the posts
+        // TODO: This could be an issue with storing the query, but with page reloads it would update
         return function ($callback) use ($query) {
-            while ($query->have_posts()){
+            while ($query->have_posts()) {
                 $query->the_post();
                 call_user_func_array($callback, [get_the_ID()]);
             }
-            //This function because wordpress can't handle it self
+            // This function because wordpress can't handle itself
             wp_reset_postdata();
             return $query;
         };
     }
-    
-    private function loop_through_all($callback, $args = []){
-        return call_user_func_array($this->loop_through_posts($args), [$callback]);
+
+    private function loopAll($callback, $args = [])
+    {
+        return call_user_func_array($this->loop($args), [$callback]);
     }
 }

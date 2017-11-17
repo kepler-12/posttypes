@@ -1,20 +1,20 @@
 {
-    "name": "jjgrainger/posttypes",
-    "description": "Simple WordPress custom post types.",
-    "homepage": "https://github.com/jjgrainger/posttype",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Joe Grainger",
-            "email": "hello@jjgrainger.co.uk",
-            "homepage": "http://jjgrainger.co.uk"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {
-        "php": ">=5.3.0"
-    },
-    "autoload": {
-        "psr-4": { "PostTypes\\": "src/" }
+  "name": "kepler-12/posttypes",
+  "description": "Simple WordPress custom post types.",
+  "homepage": "https://github.com/kepler-12/posttype",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Kepler 12",
+      "email": "dev@ttgmxd.com",
+      "homepage": "http://kepler12.com"
     }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=5.3.0"
+  },
+  "autoload": {
+    "psr-4": { "PostTypes\\": "src/" }
+  }
 }

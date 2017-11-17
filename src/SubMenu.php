@@ -11,7 +11,7 @@ trait SubMenu
      */
 
     private $pages = [];
-    
+
     /**
      * A temparary array for storing the submenu before its registered by wp
      * TODO: Find a better way to do this
@@ -20,7 +20,7 @@ trait SubMenu
      */
     private $submenus = [];
 
-    public function add_submenu($pageTitle, $menuTitle, $capebilities = "manage_options")
+    public function addSubmenu($pageTitle, $menuTitle, $capebilities = "manage_options")
     {
         $page_slug = sanitize_title($pageTitle);
         $this->submenus['submenu_slug'] = $this->slug . '_' . $page_slug . '_submenu_page';
@@ -31,7 +31,7 @@ trait SubMenu
         add_action('admin_menu', array($this, 'add_submenu_page'));
     }
 
-    public function add_submenu_page()
+    public function addSubmenuPage()
     {
         add_submenu_page(
             "edit.php?post_type=$this->slug",
@@ -44,17 +44,12 @@ trait SubMenu
         $this->submenus = [];
     }
 
-    public function submenu_content()
-    {
-        echo "";
-    }
-
     /**
      * Add an Advanced Custom Field Submenu
      * @param $pageTitle
      * @param $menuTitle
      */
-    public function add_acf_submenu_page($pageTitle, $menuTitle)
+    public function addAcfSubmenuPage($pageTitle, $menuTitle)
     {
         acf_add_options_sub_page(array(
             'page_title' => $pageTitle,
